@@ -109,11 +109,7 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
   NSMutableDictionary<NSAttributedStringKey, id> *defaultAttributes =
       [_backedTextInputView.defaultTextAttributes mutableCopy];
 
-#if !TARGET_OS_MACCATALYST
-  RCTWeakEventEmitterWrapper *eventEmitterWrapper = [RCTWeakEventEmitterWrapper new];
-  eventEmitterWrapper.eventEmitter = _eventEmitter;
-  defaultAttributes[RCTAttributedStringEventEmitterKey] = eventEmitterWrapper;
-#endif
+  defaultAttributes[RCTAttributedStringEventEmitterKey] = RCTWrapEventEmitter(_eventEmitter);
 
   _backedTextInputView.defaultTextAttributes = defaultAttributes;
 }
@@ -209,7 +205,7 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
         newTextInputProps.traits.autoCorrect.value();
   }
 #endif // macOS]
-  
+
   if (newTextInputProps.traits.contextMenuHidden != oldTextInputProps.traits.contextMenuHidden) {
     _backedTextInputView.contextMenuHidden = newTextInputProps.traits.contextMenuHidden;
   }
@@ -217,6 +213,14 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
   if (newTextInputProps.traits.editable != oldTextInputProps.traits.editable) {
     _backedTextInputView.editable = newTextInputProps.traits.editable;
   }
+
+#if !TARGET_OS_OSX // [macOS]
+  if (newTextInputProps.multiline &&
+      newTextInputProps.traits.dataDetectorTypes != oldTextInputProps.traits.dataDetectorTypes) {
+    _backedTextInputView.dataDetectorTypes =
+        RCTUITextViewDataDetectorTypesFromStringVector(newTextInputProps.traits.dataDetectorTypes);
+  }
+#endif // [macOS]
 
 #if !TARGET_OS_OSX // [macOS]
   if (newTextInputProps.traits.enablesReturnKeyAutomatically !=
@@ -229,7 +233,7 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
         RCTUIKeyboardAppearanceFromKeyboardAppearance(newTextInputProps.traits.keyboardAppearance);
   }
 #endif // [macOS]
-  
+
 #if !TARGET_OS_OSX // [macOS]
   if (newTextInputProps.traits.spellCheck != oldTextInputProps.traits.spellCheck) {
     _backedTextInputView.spellCheckingType =
@@ -241,7 +245,7 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
         newTextInputProps.traits.spellCheck.value();
   }
 #endif // macOS]
-  
+
 #if TARGET_OS_OSX // [macOS
   if (newTextInputProps.traits.grammarCheck != oldTextInputProps.traits.grammarCheck && newTextInputProps.traits.grammarCheck.has_value()) {
     _backedTextInputView.grammarCheckingEnabled =
@@ -310,10 +314,8 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
   if (newTextInputProps.textAttributes != oldTextInputProps.textAttributes) {
     NSMutableDictionary<NSAttributedStringKey, id> *defaultAttributes =
         RCTNSTextAttributesFromTextAttributes(newTextInputProps.getEffectiveTextAttributes(RCTFontSizeMultiplier()));
-#if !TARGET_OS_MACCATALYST
     defaultAttributes[RCTAttributedStringEventEmitterKey] =
         _backedTextInputView.defaultTextAttributes[RCTAttributedStringEventEmitterKey];
-#endif
     _backedTextInputView.defaultTextAttributes = defaultAttributes;
   }
 
@@ -369,6 +371,8 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
 - (void)updateLayoutMetrics:(const LayoutMetrics &)layoutMetrics
            oldLayoutMetrics:(const LayoutMetrics &)oldLayoutMetrics
 {
+  CGSize previousContentSize = _backedTextInputView.contentSize;
+
   [super updateLayoutMetrics:layoutMetrics oldLayoutMetrics:oldLayoutMetrics];
 
 #if TARGET_OS_OSX // [macOS
@@ -379,7 +383,7 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
   _backedTextInputView.textContainerInset =
       RCTUIEdgeInsetsFromEdgeInsets(layoutMetrics.contentInsets - layoutMetrics.borderWidth);
 
-  if (_eventEmitter) {
+  if (!CGSizeEqualToSize(previousContentSize, _backedTextInputView.contentSize) && _eventEmitter) {
     static_cast<const TextInputEventEmitter &>(*_eventEmitter).onContentSizeChange([self _textInputMetrics]);
   }
 }
@@ -546,7 +550,7 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
   }
 }
 
-- (void)grammarCheckingDidChange:(BOOL)enabled 
+- (void)grammarCheckingDidChange:(BOOL)enabled
 {
   if (_eventEmitter) {
     std::static_pointer_cast<TextInputEventEmitter const>(_eventEmitter)->onGrammarCheckChange({.grammarCheckEnabled = static_cast<bool>(enabled)});
@@ -832,6 +836,11 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
 
 - (void)_restoreTextSelection
 {
+  [self _restoreTextSelectionAndIgnoreCaretChange:NO];
+}
+
+- (void)_restoreTextSelectionAndIgnoreCaretChange:(BOOL)ignore
+{
   const auto &selection = static_cast<const TextInputProps &>(*_props).selection;
   if (!selection.has_value()) {
     return;
@@ -841,6 +850,9 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
                                                    offset:selection->start];
   auto end = [_backedTextInputView positionFromPosition:_backedTextInputView.beginningOfDocument offset:selection->end];
   auto range = [_backedTextInputView textRangeFromPosition:start toPosition:end];
+  if (ignore && range.empty) {
+    return;
+  }
   [_backedTextInputView setSelectedTextRange:range notifyDelegate:YES];
 #endif // [macOS]
 }
@@ -857,19 +869,20 @@ static NSSet<NSNumber *> *returnKeyTypesSet;
   // Updating the UITextView attributedText, for example changing the lineHeight, the color or adding
   // a new paragraph with \n, causes the cursor to move to the end of the Text and scroll.
   // This is fixed by restoring the cursor position and scrolling to that position (iOS issue 652653).
-  if (selectedRange.empty) {
-    // Maintaining a cursor position relative to the end of the old text.
-    NSInteger offsetStart = [_backedTextInputView offsetFromPosition:_backedTextInputView.beginningOfDocument
-                                                          toPosition:selectedRange.start];
-    NSInteger offsetFromEnd = oldTextLength - offsetStart;
-    NSInteger newOffset = attributedString.string.length - offsetFromEnd;
-    UITextPosition *position = [_backedTextInputView positionFromPosition:_backedTextInputView.beginningOfDocument
-                                                                   offset:newOffset];
-    [_backedTextInputView setSelectedTextRange:[_backedTextInputView textRangeFromPosition:position toPosition:position]
-                                notifyDelegate:YES];
-    [_backedTextInputView scrollRangeToVisible:NSMakeRange(offsetStart, 0)];
-  }
-  [self _restoreTextSelection];
+  // Maintaining a cursor position relative to the end of the old text.
+  NSInteger offsetStart = [_backedTextInputView offsetFromPosition:_backedTextInputView.beginningOfDocument
+                                                        toPosition:selectedRange.start];
+  NSInteger offsetFromEnd = oldTextLength - offsetStart;
+  NSInteger newOffset = attributedString.string.length - offsetFromEnd;
+  UITextPosition *position = [_backedTextInputView positionFromPosition:_backedTextInputView.beginningOfDocument
+                                                                 offset:newOffset];
+  [_backedTextInputView setSelectedTextRange:[_backedTextInputView textRangeFromPosition:position toPosition:position]
+                              notifyDelegate:YES];
+  [_backedTextInputView scrollRangeToVisible:NSMakeRange(offsetStart, 0)];
+
+  // A zero-length selection range can cause the caret position to change on iOS,
+  // and we have already updated the caret position, so we can safely ignore caret changing in this place.
+  [self _restoreTextSelectionAndIgnoreCaretChange:YES];
   [self _updateTypingAttributes];
   _lastStringStateWasUpdatedWith = attributedString;
 #endif // [macOS]
