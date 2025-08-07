@@ -48,6 +48,18 @@ static NSLineBreakMode RCTNSLineBreakModeFromEllipsizeMode(EllipsizeMode ellipsi
 
   CGSize maximumSize = CGSize{layoutConstraints.maximumSize.width, CGFLOAT_MAX};
 
+  // A workaround for the issue with empty line measurement:
+  // When maximumNumberOfLines is set to N and N+1 line is empty, the returned
+  // measurement is for N+1 lines. Adding any character to that line results
+  // in the correct measurement.
+  if (paragraphAttributes.maximumNumberOfLines > 0 && attributedString.length > 0 &&
+      [[attributedString string] characterAtIndex:attributedString.length - 1] == '\n') {
+    NSMutableAttributedString *mutableString =
+        [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
+    [mutableString replaceCharactersInRange:NSMakeRange(attributedString.length - 1, 1) withString:@"\n "];
+    attributedString = mutableString;
+  }
+
   NSTextStorage *textStorage = [self _textStorageAndLayoutManagerWithAttributesString:attributedString
                                                                   paragraphAttributes:paragraphAttributes
                                                                                  size:maximumSize];
@@ -279,11 +291,10 @@ static NSLineBreakMode RCTNSLineBreakModeFromEllipsizeMode(EllipsizeMode ellipsi
   // after (fraction == 1.0) the last character, then the attribute is valid.
   if (textStorage.length > 0 && (fraction > 0 || characterIndex > 0) &&
       (fraction < 1 || characterIndex < textStorage.length - 1)) {
-    RCTWeakEventEmitterWrapper *eventEmitterWrapper =
-        (RCTWeakEventEmitterWrapper *)[textStorage attribute:RCTAttributedStringEventEmitterKey
-                                                     atIndex:characterIndex
-                                              effectiveRange:NULL];
-    return eventEmitterWrapper.eventEmitter;
+    NSData *eventEmitterWrapper = (NSData *)[textStorage attribute:RCTAttributedStringEventEmitterKey
+                                                           atIndex:characterIndex
+                                                    effectiveRange:NULL];
+    return RCTUnwrapEventEmitter(eventEmitterWrapper);
   }
 
   return nil;

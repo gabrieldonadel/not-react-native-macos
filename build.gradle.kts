@@ -54,6 +54,8 @@ nexusPublishing {
     sonatype {
       username.set(sonatypeUsername)
       password.set(sonatypePassword)
+      nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+      snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
     }
   }
 }
@@ -92,7 +94,7 @@ tasks.register("build") {
 tasks.register("publishAllToMavenTempLocal") {
   description = "Publish all the artifacts to be available inside a Maven Local repository on /tmp."
   dependsOn(":packages:react-native:ReactAndroid:publishAllPublicationsToMavenTempLocalRepository")
-  // We don't publish the external-artifacts to Maven Local as CircleCI is using it via workspace.
+  // We don't publish the external-artifacts to Maven Local as ci is using it via workspace.
   dependsOn(
       ":packages:react-native:ReactAndroid:hermes-engine:publishAllPublicationsToMavenTempLocalRepository")
 }
