@@ -79,7 +79,7 @@ jobs:
         uses: ./.github/actions/yarn-install
       - name: Restore workspace
         if: steps.restore-slice-folder.outputs.cache-hit != 'true'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: ios-prebuilds-workspace
           path: packages/react-native/third-party/
@@ -141,7 +141,7 @@ jobs:
         uses: ./.github/actions/yarn-install
       - name: Download slices
         if: steps.restore-xcframework.outputs.cache-hit != 'true'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           pattern: prebuild-slice-${{ matrix.flavor }}-*
           path: packages/react-native/third-party/.build/Build/Products
