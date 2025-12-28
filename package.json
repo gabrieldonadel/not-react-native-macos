@@ -54,7 +54,7 @@
     "@nx/js": "^21.4.1",
     "@react-native/metro-babel-transformer": "workspace:*",
     "@react-native/metro-config": "workspace:*",
-    "@tsconfig/node18": "1.0.1",
+    "@tsconfig/node18": "18.2.6",
     "@types/react": "^19.0.0",
     "@typescript-eslint/parser": "^7.1.1",
     "@yarnpkg/types": "^4.0.1",
