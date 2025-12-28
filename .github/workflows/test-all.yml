@@ -213,7 +213,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Download App
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: RNTesterApp-${{ matrix.architecture }}-${{ matrix.jsengine }}-${{ matrix.flavor }}
           path: /tmp/RNTesterBuild/RNTester.app
@@ -256,12 +256,12 @@ jobs:
         with:
           ruby-version: 2.6.10
       - name: Download Hermes
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: hermes-darwin-bin-${{matrix.flavor}}
           path: /tmp/react-native-tmp
       - name: Download React Native Package
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: react-native-package
           path: /tmp/react-native-tmp
@@ -335,12 +335,12 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
       - name: Download Maven Local
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: maven-local
           path: /tmp/react-native-tmp/maven-local
       - name: Download React Native Package
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: react-native-package
           path: /tmp/react-native-tmp
@@ -466,7 +466,7 @@ jobs:
       - name: Install node dependencies
         uses: ./.github/actions/yarn-install
       - name: Download APK
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: rntester-${{ matrix.jsengine }}-${{ matrix.flavor }}
           path: ./packages/rn-tester/android/app/build/outputs/apk/${{ matrix.jsengine }}/${{ matrix.flavor }}/
@@ -537,12 +537,12 @@ jobs:
       - name: Setup git safe folders
         run: git config --global --add safe.directory '*'
       - name: Download npm package artifact
-        uses: actions/download-artifact@v4.1.3
+        uses: actions/download-artifact@v7
         with:
           name: react-native-package
           path: build
       - name: Download maven-local artifact
-        uses: actions/download-artifact@v4.1.3
+        uses: actions/download-artifact@v7
         with:
           name: maven-local
           path: /tmp/maven-local
