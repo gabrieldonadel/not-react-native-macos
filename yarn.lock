@@ -2469,7 +2469,7 @@ __metadata:
     "@nx/js": "npm:^21.4.1"
     "@react-native/metro-babel-transformer": "workspace:*"
     "@react-native/metro-config": "workspace:*"
-    "@tsconfig/node18": "npm:1.0.1"
+    "@tsconfig/node18": "npm:18.2.6"
     "@types/react": "npm:^19.0.0"
     "@typescript-eslint/parser": "npm:^7.1.1"
     "@yarnpkg/types": "npm:^4.0.1"
@@ -3005,10 +3005,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node18@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@tsconfig/node18@npm:1.0.1"
-  checksum: 10c0/8b2c79b9a0a9e8a305e7d8d28ba2966d626c9bcbd601725f1acddf1660bbb3316f2c24a351ac7912c335cb969ba0e436940516992372d5e992355c7ff02e1e4d
+"@tsconfig/node18@npm:18.2.6":
+  version: 18.2.6
+  resolution: "@tsconfig/node18@npm:18.2.6"
+  checksum: 10c0/52fc3fadd9d60225c30983f1236f9d16a83f942d27accf3a71d71aee7c76e705307aefb89baa5b3df631c93fe41b47a25ede4f14c6816019000233f1e4df3302
   languageName: node
   linkType: hard
 
