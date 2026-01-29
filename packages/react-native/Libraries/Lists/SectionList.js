@@ -17,10 +17,10 @@ import type {
   SectionBase as _SectionBase,
   SectionData,
   VirtualizedSectionListProps,
-} from '@react-native-macos/virtualized-lists'; // [macOS]
+} from '@not-react-native-macos/virtualized-lists'; // [macOS]
 
 import Platform from '../Utilities/Platform';
-import VirtualizedLists from '@react-native-macos/virtualized-lists'; // [macOS]
+import VirtualizedLists from '@not-react-native-macos/virtualized-lists'; // [macOS]
 import * as React from 'react';
 
 const VirtualizedSectionList = VirtualizedLists.VirtualizedSectionList;

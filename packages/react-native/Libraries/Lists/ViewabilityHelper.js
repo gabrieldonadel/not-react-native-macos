@@ -14,9 +14,9 @@ export type {
   ListViewToken as ViewToken,
   ViewabilityConfig,
   ViewabilityConfigCallbackPair,
-} from '@react-native-macos/virtualized-lists'; // [macOS]
+} from '@not-react-native-macos/virtualized-lists'; // [macOS]
 
-import VirtualizedLists from '@react-native-macos/virtualized-lists'; // [macOS]
+import VirtualizedLists from '@not-react-native-macos/virtualized-lists'; // [macOS]
 
 type ViewabilityHelperType = typeof VirtualizedLists.ViewabilityHelper;
 const ViewabilityHelper: ViewabilityHelperType =

@@ -16,12 +16,12 @@ import type {
   ListViewToken,
   ViewabilityConfigCallbackPair,
   VirtualizedListProps,
-} from '@react-native-macos/virtualized-lists'; // [macOS]
+} from '@not-react-native-macos/virtualized-lists'; // [macOS]
 
 import * as ReactNativeFeatureFlags from '../../src/private/featureflags/ReactNativeFeatureFlags';
 import {type ScrollResponderType} from '../Components/ScrollView/ScrollView';
 import View from '../Components/View/View';
-import VirtualizedLists from '@react-native-macos/virtualized-lists'; // [macOS]
+import VirtualizedLists from '@not-react-native-macos/virtualized-lists'; // [macOS]
 import memoizeOne from 'memoize-one';
 import * as React from 'react';
 

@@ -13,7 +13,7 @@ import type {
   ViewToken,
   VirtualizedListProps,
   ViewabilityConfig,
-} from '@react-native-macos/virtualized-lists'; // [macOS]
+} from '@not-react-native-macos/virtualized-lists'; // [macOS]
 import type {ScrollViewComponent} from '../Components/ScrollView/ScrollView';
 import type {StyleProp} from '../StyleSheet/StyleSheet';
 import type {ViewStyle} from '../StyleSheet/StyleSheetTypes';

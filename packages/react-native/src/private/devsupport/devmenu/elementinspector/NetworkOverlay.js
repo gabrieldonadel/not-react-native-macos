@@ -11,7 +11,7 @@
 'use strict';
 
 import type XMLHttpRequest from '../../../../../Libraries/Network/XMLHttpRequest';
-import type {ListRenderItemInfo} from '@react-native-macos/virtualized-lists'; // [macOS]
+import type {ListRenderItemInfo} from '@not-react-native-macos/virtualized-lists'; // [macOS]
 
 import ScrollView from '../../../../../Libraries/Components/ScrollView/ScrollView';
 import * as React from 'react';

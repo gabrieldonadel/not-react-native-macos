@@ -21,7 +21,7 @@ const TextInput = require('../Components/TextInput/TextInput').default;
 const View = require('../Components/View/View').default;
 const Text = require('../Text/Text').default;
 const {VirtualizedList} =
-  require('@react-native-macos/virtualized-lists').default; // [macOS]
+  require('@not-react-native-macos/virtualized-lists').default; // [macOS]
 
 export type ReactTestInstance = ReactTestRendererType['root'];
 export type Predicate = (node: ReactTestInstance) => boolean;

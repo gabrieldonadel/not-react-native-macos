@@ -1,11 +1,11 @@
 {
-  "name": "react-native-macos",
+  "name": "not-react-native-macos",
   "version": "1000.0.0",
   "description": "React Native for macOS",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/microsoft/react-native-macos.git",
+    "url": "git+https://github.com/gabrieldonadel/not-react-native-macos.git",
     "directory": "packages/react-native"
   },
   "homepage": "https://reactnative.dev/",
@@ -24,8 +24,8 @@
     "node": ">= 20.19.4"
   },
   "bin": {
-    "react-native": "cli.js",
-    "react-native-macos": "cli.js"
+    "not-react-native-macos": "cli.js",
+    "react-native": "cli.js"
   },
   "main": "./index.js",
   "types": "types",
@@ -162,7 +162,7 @@
   },
   "dependencies": {
     "@jest/create-cache-key-function": "^29.7.0",
-    "@react-native-macos/virtualized-lists": "workspace:*",
+    "@not-react-native-macos/virtualized-lists": "workspace:*",
     "@react-native/assets-registry": "workspace:*",
     "@react-native/codegen": "workspace:*",
     "@react-native/community-cli-plugin": "workspace:*",
@@ -202,7 +202,7 @@
       {
         "name": "FBReactNativeSpec",
         "type": "all",
-        "ios": {
+        "macos": {
           "modules": {
             "AccessibilityManager": {
               "unstableRequiresMainQueueSetup": true

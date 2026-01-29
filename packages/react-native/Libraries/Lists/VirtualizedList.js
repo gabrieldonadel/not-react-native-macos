@@ -10,7 +10,7 @@
 
 'use strict';
 
-import VirtualizedLists from '@react-native-macos/virtualized-lists'; // [macOS]
+import VirtualizedLists from '@not-react-native-macos/virtualized-lists'; // [macOS]
 
 type VirtualizedListType = typeof VirtualizedLists.VirtualizedList;
 const VirtualizedListComponent: VirtualizedListType =
@@ -22,5 +22,5 @@ export type {
   ListViewToken,
   Separators,
   VirtualizedListProps,
-} from '@react-native-macos/virtualized-lists'; // [macOS]
+} from '@not-react-native-macos/virtualized-lists'; // [macOS]
 export default VirtualizedListComponent;

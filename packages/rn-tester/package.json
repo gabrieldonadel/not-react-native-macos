@@ -33,8 +33,8 @@
     "nullthrows": "^1.1.1"
   },
   "peerDependencies": {
-    "react": "19.2.0",
-    "react-native-macos": "workspace:*"
+    "not-react-native-macos": "workspace:*",
+    "react": "19.2.0"
   },
   "codegenConfig": {
     "name": "AppSpecs",
@@ -62,7 +62,7 @@
     "@react-native-community/cli-platform-ios": "20.0.0",
     "commander": "^12.0.0",
     "listr2": "^6.4.1",
-    "react-native-macos": "workspace:*",
+    "not-react-native-macos": "workspace:*",
     "rxjs": "npm:@react-native-community/rxjs@6.5.4-custom"
   }
 }

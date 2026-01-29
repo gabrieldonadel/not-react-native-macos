@@ -18,7 +18,7 @@ import {type ColorValue} from '../StyleSheet/StyleSheet';
 import {type EventSubscription} from '../vendor/emitter/EventEmitter';
 import NativeModalManager from './NativeModalManager';
 import RCTModalHostView from './RCTModalHostViewNativeComponent';
-import VirtualizedLists from '@react-native-macos/virtualized-lists'; // [macOS]
+import VirtualizedLists from '@not-react-native-macos/virtualized-lists'; // [macOS]
 import * as React from 'react';
 
 const ScrollView = require('../Components/ScrollView/ScrollView').default;
