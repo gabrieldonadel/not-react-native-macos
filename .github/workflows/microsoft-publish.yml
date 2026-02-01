@@ -37,7 +37,7 @@ jobs:
           name: website-build
           path: ./docsite/build
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./docsite/build
 
