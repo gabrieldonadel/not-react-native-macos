@@ -2317,9 +2317,7 @@ enum MouseEventType {
   // corner
   destinationView.layer.cornerRadius = sourceView.layer.cornerRadius;
   sourceView.layer.cornerRadius = 0;
-#if !TARGET_OS_OSX // [macOS]
   destinationView.layer.cornerCurve = sourceView.layer.cornerCurve;
-#endif // [macOS]
 
   // custom layers
   if (_borderLayer != nullptr) {

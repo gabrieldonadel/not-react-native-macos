@@ -63,6 +63,7 @@ UIKIT_STATIC_INLINE void UIBezierPathAppendPath(UIBezierPath *path, UIBezierPath
 #define RCTPlatformImage UIImage
 #define RCTUIImage UIImage
 #define RCTUIPanGestureRecognizer UIPanGestureRecognizer
+#define RCTPlatformSwitch UISwitch
 
 UIKIT_STATIC_INLINE RCTPlatformView *RCTUIViewHitTestWithEvent(RCTPlatformView *view, CGPoint point, __unused UIEvent *__nullable event)
 {
@@ -489,6 +490,7 @@ void UIBezierPathAppendPath(UIBezierPath *path, UIBezierPath *appendPath);
 
 // UIView
 #define RCTPlatformView NSView
+#define RCTPlatformSwitch NSSwitch
 
 @interface RCTUIView : RCTPlatformView
 
